@@ -182,7 +182,10 @@ def extract_landmarks(pose_det, hand_det, face_det, mp, img_bgr: np.ndarray
     Run all three landmarkers on one BGR frame.
     Returns:
       coords     (543, 3)  float32 — (x, y, z)
-      confidence (543,)    float32 — 0.0 if not detected
+      confidence (543,)    float32 — Confidence score (0.0 if not detected).
+                                     NOTE: For hands, MediaPipe Tasks API does not
+                                     provide per-landmark visibility. Confidence is
+                                     hardcoded to 1.0 (present) or 0.0 (absent).
     """
     N = config.N_TOTAL_LANDMARKS
     coords     = np.zeros((N, 3), dtype=np.float32)
