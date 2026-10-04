@@ -41,3 +41,83 @@ A secondary analysis revealed that **71 clips (~11%)** possess a hand-tracking g
 Initially, it seemed prudent to exclude these 71 clips from the evaluation splits to ensure test metrics reflect only real signal. However, performing this exclusion dropped entire vocabulary classes from the LOSO test sets (wiping out up to 20% of the sentences in some folds). 
 
 Therefore, a deliberate decision was made to **RETAIN** these clips across all splits (Train, Val, and Test). While this means models will be evaluated on partially interpolated/fabricated hand trajectories for these specific difficult gestures, this is preferable to biasing the evaluation exclusively toward "easy" gestures by removing the hardest ones. The `has_long_gap` flag remains in `clip_index.csv`/`segment_manifest.csv` for any future researchers wishing to run a clean-subset ablation.
+
+## Appendix: Raw Split Class Check Output
+*Generated at commit `64fad2af7321ab3335af547f3b7990f446ab4e5b`*
+
+```text
+Total valid sentence classes in corpus: 97
+
+--- SPLIT SIZES ---
+Standard Split: Train=377, Val=93, Test=192
+LOSO Fold 1: Train=470, Val=96, Test=96
+LOSO Fold 2: Train=470, Val=96, Test=96
+LOSO Fold 3: Train=477, Val=90, Test=95
+LOSO Fold 4: Train=476, Val=96, Test=90
+LOSO Fold 5: Train=470, Val=96, Test=96
+LOSO Fold 6: Train=473, Val=93, Test=96
+LOSO Fold 7: Train=473, Val=96, Test=93
+
+--- ZERO-COVERAGE CLASSES IN VAL/TEST ---
+Standard Split:
+  VAL (4 missing classes):
+    - do_not_be_stubborn
+    - nice_to_meet_you
+    - what_do_you_do
+    - what_have_you_planned_for_your_career
+  TEST (0 missing classes):
+LOSO Fold 1:
+  VAL (1 missing classes):
+    - i_am_(age)
+  TEST (1 missing classes):
+    - what_happened
+LOSO Fold 2:
+  VAL (1 missing classes):
+    - what_happened
+  TEST (1 missing classes):
+    - i_am_(age)
+LOSO Fold 3:
+  VAL (7 missing classes):
+    - do_not_abuse_him
+    - he_is_on_the_way
+    - how_are_things
+    - i_am_very_happy
+    - tell_me_truth
+    - what_have_you_planned_for_your_career
+    - you_do_anything_i_do_not_care
+  TEST (2 missing classes):
+    - do_you_need_something
+    - he_is_on_the_way
+LOSO Fold 4:
+  VAL (1 missing classes):
+    - what_have_you_planned_for_your_career
+  TEST (7 missing classes):
+    - do_not_abuse_him
+    - he_is_on_the_way
+    - how_are_things
+    - i_am_very_happy
+    - tell_me_truth
+    - what_have_you_planned_for_your_career
+    - you_do_anything_i_do_not_care
+LOSO Fold 5:
+  VAL (1 missing classes):
+    - what_have_you_planned_for_your_career
+  TEST (1 missing classes):
+    - what_have_you_planned_for_your_career
+LOSO Fold 6:
+  VAL (4 missing classes):
+    - do_not_be_stubborn
+    - nice_to_meet_you
+    - what_do_you_do
+    - what_have_you_planned_for_your_career
+  TEST (1 missing classes):
+    - what_have_you_planned_for_your_career
+LOSO Fold 7:
+  VAL (1 missing classes):
+    - what_have_you_planned_for_your_career
+  TEST (4 missing classes):
+    - do_not_be_stubborn
+    - nice_to_meet_you
+    - what_do_you_do
+    - what_have_you_planned_for_your_career
+```
