@@ -71,6 +71,8 @@ preprocessed_v4/                # Canonical v4 Output
 
 ## Landmark Layout (543 total)
 
+By default, the pipeline extracts the full 543 MediaPipe Tasks API landmarks. You can restrict this to just the 75 pose and hand landmarks by running with `--landmark_subset pose_hands`.
+
 | Index Range | Group | Count |
 |---|---|---|
 | 0 – 32 | Pose (body) | 33 |

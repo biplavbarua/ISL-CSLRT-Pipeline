@@ -135,7 +135,7 @@ def build_label_map(norm_base: Path) -> dict:
 # MAIN
 # ---------------------------------------------------------------------------
 
-def run_segmentation():
+def run_segmentation(limit=None, landmark_subset="full"):
     os.makedirs(config.LOGS_DIR, exist_ok=True)
     os.makedirs(config.SEGMENTS_DIR, exist_ok=True)
     fh = logging.FileHandler(os.path.join(config.LOGS_DIR, "step03_segment.log"), mode="w")
@@ -193,6 +193,8 @@ def run_segmentation():
             for sent_dir in sorted(norm_base.iterdir()) if sent_dir.is_dir()
             for sig_dir  in sorted(sent_dir.iterdir())  if sig_dir.is_dir()
         ]
+        if limit is not None:
+            tasks = tasks[:limit]
 
         for sent_slug, sid in tqdm(tasks, desc="Segmenting", unit="clip"):
             in_path  = norm_base  / sent_slug / sid / "coords.npy"
@@ -203,7 +205,9 @@ def run_segmentation():
                 log.warning(f"  Missing normalized coords: {in_path}")
                 continue
 
-            coords = np.load(str(in_path))    # (n_frames, 543, 3)
+            coords = np.load(str(in_path))    # (n_frames, 543, 3) or (n_frames, 75, 3)
+            if landmark_subset == "pose_hands" and coords.shape[1] == 543:
+                coords = coords[:, :75, :]
             n_orig = coords.shape[0]
 
             if n_orig < config.TARGET_FRAMES:
