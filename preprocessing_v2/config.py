@@ -56,6 +56,15 @@ LOW_RES_SIGNERS = [1, 2]
 HD_SIGNERS      = [3, 4, 5, 6, 7]
 
 # ---------------------------------------------------------------------------
+# PIPELINE CONFIGURATION
+# ---------------------------------------------------------------------------
+# List of clips to explicitly exclude from dataset (e.g. corrupted, zero-content)
+# Format: "sentence_slug/signer_id"
+EXCLUDED_CLIPS = {
+    "he_is_on_the_way/3",  # Zero hand detections (hands completely out of frame)
+}
+
+# ---------------------------------------------------------------------------
 # MEDIAPIPE CONFIGURATION (Legacy / Unused)
 # Note: The parameters below match the old mp.solutions.holistic API.
 # They are no longer imported by step01_extract_keypoints.py, which now

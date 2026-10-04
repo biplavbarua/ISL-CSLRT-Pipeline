@@ -91,11 +91,19 @@ def load_manifest() -> list[dict]:
         log.error("Run step03_segment.py first.")
         sys.exit(1)
     with open(manifest_path, encoding="utf-8") as f:
-        rows = list(csv.DictReader(f))
-    # Convert signer_id to int for filtering
-    for r in rows:
+        all_rows = list(csv.DictReader(f))
+        
+    rows = []
+    # Convert signer_id to int for filtering, and skip excluded clips
+    for r in all_rows:
+        clip_id = f"{r['sentence_slug']}/{r['signer_id']}"
+        if hasattr(config, 'EXCLUDED_CLIPS') and clip_id in config.EXCLUDED_CLIPS:
+            log.info(f"Skipping excluded clip: {clip_id}")
+            continue
         r["signer_id"] = int(r["signer_id"])
-    log.info(f"Manifest loaded: {len(rows)} clips")
+        rows.append(r)
+        
+    log.info(f"Manifest loaded: {len(rows)} valid clips (excluded {len(all_rows) - len(rows)})")
     return rows
 
 
