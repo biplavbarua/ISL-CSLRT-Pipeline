@@ -259,7 +259,7 @@ def extract_landmarks(pose_det, hand_det, face_det, mp, img_bgr: np.ndarray
 # PROCESS ONE CLIP
 # ---------------------------------------------------------------------------
 
-def process_clip(pose_det, hand_det, face_det, mp, clip: dict) -> bool:
+def process_clip(pose_det, hand_det, face_det, mp, clip: dict, landmark_subset="full") -> bool:
     """
     Process all frames for one (sentence, signer) clip.
     Saves coords.npy and confidence.npy. Returns True on success.
@@ -291,6 +291,10 @@ def process_clip(pose_det, hand_det, face_det, mp, clip: dict) -> bool:
     out_dir = Path(config.KEYPOINTS_DIR) / sentence_slug / str(signer_id)
     out_dir.mkdir(parents=True, exist_ok=True)
 
+    if landmark_subset == "pose_hands":
+        all_coords = all_coords[:, :75, :]
+        all_confidence = all_confidence[:, :75]
+
     np.save(str(out_dir / "coords.npy"),     all_coords)
     np.save(str(out_dir / "confidence.npy"), all_confidence)
     return True
@@ -300,7 +304,7 @@ def process_clip(pose_det, hand_det, face_det, mp, clip: dict) -> bool:
 # MAIN
 # ---------------------------------------------------------------------------
 
-def run_extraction():
+def run_extraction(limit=None, landmark_subset="full"):
     log.info("=" * 70)
     log.info("ISL-CSLRT PREPROCESSING  —  Step 01: Keypoint Extraction")
     log.info("  Strategy: Pose + Hand + Face landmarkers (mediapipe 0.10.x Tasks API)")
@@ -318,6 +322,8 @@ def run_extraction():
 
     with open(index_path, encoding="utf-8") as f:
         clips = [r for r in csv.DictReader(f) if int(r["n_frames"]) > 0]
+        if limit is not None:
+            clips = clips[:limit]
 
     total_frames = sum(int(c["n_frames"]) for c in clips)
     log.info(f"\nProcessing {len(clips)} clips  ({total_frames:,} frames total)")
@@ -330,7 +336,7 @@ def run_extraction():
     t0      = time.time()
 
     for clip in tqdm(clips, desc="Extracting keypoints", unit="clip"):
-        ok = process_clip(pose_det, hand_det, face_det, mp_mod, clip)
+        ok = process_clip(pose_det, hand_det, face_det, mp_mod, clip, landmark_subset=landmark_subset)
         if ok: success += 1
         else:  skip    += 1
 

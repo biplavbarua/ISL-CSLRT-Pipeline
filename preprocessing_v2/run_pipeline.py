@@ -35,7 +35,7 @@ logging.basicConfig(
 )
 
 
-def run_step(step_num: int):
+def run_step(step_num: int, limit=None, landmark_subset="full"):
     t0 = time.time()
     if step_num == 0:
         log.info("\n" + "█" * 50)
@@ -49,21 +49,21 @@ def run_step(step_num: int):
         log.info("█  STEP 01 — KEYPOINT EXTRACTION  (slowest step ~5-30min)")
         log.info("█" * 50)
         from step01_extract_keypoints import run_extraction
-        run_extraction()
+        run_extraction(limit=limit, landmark_subset=landmark_subset)
 
     elif step_num == 2:
         log.info("\n" + "█" * 50)
         log.info("█  STEP 02 — NORMALIZATION + INTERPOLATION")
         log.info("█" * 50)
         from step02_normalize import run_normalization
-        run_normalization()
+        run_normalization(limit=limit)
 
     elif step_num == 3:
         log.info("\n" + "█" * 50)
         log.info("█  STEP 03 — TEMPORAL SEGMENTATION")
         log.info("█" * 50)
         from step03_segment import run_segmentation
-        run_segmentation()
+        run_segmentation(limit=limit, landmark_subset=landmark_subset)
 
     elif step_num == 4:
         log.info("\n" + "█" * 50)
@@ -92,6 +92,14 @@ def main():
         default=[0, 1, 2, 3, 4, 5],
         help="Which steps to run (default: all). E.g. --steps 0 1"
     )
+    parser.add_argument(
+        "--limit", type=int, default=None,
+        help="Limit the number of clips processed (for testing)."
+    )
+    parser.add_argument(
+        "--landmark_subset", type=str, choices=["full", "pose_hands"], default="full",
+        help="Subset of landmarks to extract/segment (default: full=543, pose_hands=75)."
+    )
     args = parser.parse_args()
 
     t_total = time.time()
@@ -101,7 +109,7 @@ def main():
     log.info("=" * 60)
 
     for step in args.steps:
-        run_step(step)
+        run_step(step, limit=args.limit, landmark_subset=args.landmark_subset)
 
     total_elapsed = time.time() - t_total
     log.info("\n" + "=" * 60)

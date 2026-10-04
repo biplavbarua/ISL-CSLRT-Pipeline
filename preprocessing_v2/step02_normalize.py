@@ -282,7 +282,7 @@ def process_clip(sentence_slug: str, signer_id: str) -> bool:
 # MAIN
 # ---------------------------------------------------------------------------
 
-def run_normalization():
+def run_normalization(limit=None):
     log.info("=" * 70)
     log.info("ISL-CSLRT PREPROCESSING  —  Step 02: Normalization + Interpolation")
     log.info("=" * 70)
@@ -302,6 +302,8 @@ def run_normalization():
             if not signer_dir.is_dir():
                 continue
             tasks.append((sent_dir.name, signer_dir.name))
+    if limit is not None:
+        tasks = tasks[:limit]
 
     log.info(f"Found {len(tasks)} clips to normalize")
 
