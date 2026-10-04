@@ -6,18 +6,19 @@ into signer-independent, model-ready datasets for Sign Language Recognition rese
 ## Quick Start
 
 ```bash
-cd /Users/biplavbarua/Developer/ISL_CSLRT_Corpus/preprocessing_v2
+# Option A: Rely on the default relative path
+cd path/to/ISL_CSLRT_Corpus/preprocessing_v2
+
+# Option B: Explicitly set the workspace root via environment variable
+export ISL_WORKSPACE_ROOT=/path/to/ISL_CSLRT_Corpus
+cd $ISL_WORKSPACE_ROOT/preprocessing_v2
 
 # Install dependencies (once)
-pip3 install mediapipe opencv-python h5py scikit-learn
+pip3 install -r requirements.txt
 
-# Safe Rebuild (Steps 0, 3, 4, 5)
-# Reads cached legacy keypoints and rebuilds segments, splits, and exports into v4.
-python3 run_pipeline.py --steps 0 3 4 5
+# Run the full pipeline (Steps 1 through 5)
+python3 run_pipeline.py
 ```
-
-> [!WARNING]
-> A full pipeline run (`python3 run_pipeline.py` or running steps 1 and 2) is currently **unsafe**. The configuration reads from and writes to the legacy v1 keypoint caches (`preprocessed/keypoints_raw/`). Do not run steps 1 or 2 until the keypoint output paths are version-scoped to `preprocessed_v4/` and reviewed.
 
 ## Pipeline Steps
 
