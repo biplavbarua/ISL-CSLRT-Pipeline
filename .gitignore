@@ -1,0 +1,37 @@
+# ── Raw corpus (third-party; not to be redistributed) ─────────────────
+/ISL_CSLRT_Corpus/
+
+# ── Legacy pipeline source (superseded by preprocessing_v2/) ──────────
+/preprocessing/
+
+# ── All generated / preprocessed data and caches ──────────────────────
+/preprocessed/
+/preprocessed_v4/
+
+# ── Model checkpoints ─────────────────────────────────────────────────
+training/*.pth
+training/*.pt
+training/*.ckpt
+
+# ── Large binary data formats (belt-and-suspenders) ───────────────────
+*.h5
+*.hdf5
+*.npy
+*.npz
+
+# ── Python artefacts ──────────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*.pyo
+*.egg-info/
+dist/
+build/
+.venv/
+env/
+
+# ── macOS / editor artefacts ──────────────────────────────────────────
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
