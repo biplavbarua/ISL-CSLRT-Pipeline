@@ -26,7 +26,7 @@ import os
 
 # preprocessing/ directory → go up one level → workspace root
 _PREPROCESSING_DIR = os.path.dirname(os.path.abspath(__file__))
-_WORKSPACE_ROOT    = os.path.dirname(_PREPROCESSING_DIR)
+_WORKSPACE_ROOT    = os.environ.get("ISL_WORKSPACE_ROOT", os.path.dirname(_PREPROCESSING_DIR))
 
 CORPUS_ROOT = os.path.join(_WORKSPACE_ROOT, "ISL_CSLRT_Corpus")
 OUTPUT_ROOT = os.path.join(_WORKSPACE_ROOT, "preprocessed_v4")
@@ -36,11 +36,14 @@ FRAMES_WORD_DIR     = os.path.join(CORPUS_ROOT, "Frames_Word_Level")
 VIDEOS_SENTENCE_DIR = os.path.join(CORPUS_ROOT, "Videos_Sentence_Level")
 GLOSS_CSV           = os.path.join(CORPUS_ROOT, "corpus_csv_files", "ISL Corpus sign glosses.csv")
 
-KEYPOINTS_DIR  = os.path.join(_WORKSPACE_ROOT, "preprocessed", "keypoints_raw")
-NORMALIZED_DIR = os.path.join(_WORKSPACE_ROOT, "preprocessed", "keypoints_normalized")
+KEYPOINTS_DIR  = os.path.join(OUTPUT_ROOT, "keypoints_raw")
+NORMALIZED_DIR = os.path.join(OUTPUT_ROOT, "keypoints_normalized")
 SEGMENTS_DIR   = os.path.join(OUTPUT_ROOT, "segments")
 SPLITS_DIR     = os.path.join(OUTPUT_ROOT, "splits")
 LOGS_DIR       = os.path.join(OUTPUT_ROOT, "logs")
+
+assert KEYPOINTS_DIR.startswith(OUTPUT_ROOT), "KEYPOINTS_DIR must resolve under OUTPUT_ROOT (preprocessed_v4/)"
+assert NORMALIZED_DIR.startswith(OUTPUT_ROOT), "NORMALIZED_DIR must resolve under OUTPUT_ROOT (preprocessed_v4/)"
 
 # ---------------------------------------------------------------------------
 # SIGNER METADATA
