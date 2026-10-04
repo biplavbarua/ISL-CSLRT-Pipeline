@@ -97,7 +97,7 @@ print(f"Training set: {clips.shape[0]} clips")
 
 ## Research Context
 
-**Note on Provenance:** Version 4 (v4) is a validated candidate split format. However, because it relies on the legacy `preprocessed/` keypoint caches whose exact generation provenance is unresolved, v4 is not yet fully provenance-complete or publication-ready.
+**Note on Provenance:** Version 4 (v4) is a clean, single-provenance run generated entirely from the raw data using this frozen pipeline (Commit: `b9f6235c6014886a6cef2396b311349a44179c8a`, Date: October 4, 2026). It is fully provenance-complete and publication-ready.
 
 This pipeline implements a signer-independent evaluation protocol for ISL-CSLRT
 using Leave-One-Signer-Out (LOSO) cross-validation. Whether prior published
