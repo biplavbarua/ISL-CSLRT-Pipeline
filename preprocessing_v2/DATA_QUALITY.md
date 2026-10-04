@@ -31,3 +31,13 @@ The pipeline uses linear interpolation (and forward/backward filling at boundari
 * **Short Gaps (Median = 1 frame, Mean = 2.3 frames):** The vast majority of missing detections are 1-3 frame flickers. Interpolation bridges these perfectly.
 * **Long Gaps (Max = 24 frames):** In clip `how_are_things/5`, there is a 24-frame gap at the start of the video. Visual inspection reveals the signer rapidly bringing her hands up, causing severe motion blur that MediaPipe failed to track. Because this gap occurred at the start of the clip, Step 02 **forward-filled** the coordinates from frame 24 backwards to frame 0. 
 * **Limitation:** The forward-filled hand coordinates hover statically in mid-air for 24 frames, completely ignoring the signer's actual fast, curved gesture. Interpolation on long gaps (>5-10 frames) fabricates data that does not represent the ground truth, which models may erroneously learn from.
+
+## 5. Deliberate Retention of Long-Gap Clips
+A secondary analysis revealed that **71 clips (~11%)** possess a hand-tracking gap longer than 8 consecutive frames.
+* These gaps are heavily concentrated in the HD signers (Signers 3-7).
+* They strongly cluster around ~18 specific sentences involving fast or wide gestures (e.g., `do_not_take_it_to_the_heart`, `how_can_i_trust_you`, `what_have_you_planned_for_your_career`, `turn_on_light_turn_off_light`).
+
+**Evaluation Strategy Decision:**
+Initially, it seemed prudent to exclude these 71 clips from the evaluation splits to ensure test metrics reflect only real signal. However, performing this exclusion dropped entire vocabulary classes from the LOSO test sets (wiping out up to 20% of the sentences in some folds). 
+
+Therefore, a deliberate decision was made to **RETAIN** these clips across all splits (Train, Val, and Test). While this means models will be evaluated on partially interpolated/fabricated hand trajectories for these specific difficult gestures, this is preferable to biasing the evaluation exclusively toward "easy" gestures by removing the hardest ones. The `has_long_gap` flag remains in `clip_index.csv`/`segment_manifest.csv` for any future researchers wishing to run a clean-subset ablation.
