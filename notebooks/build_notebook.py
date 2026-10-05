@@ -42,7 +42,7 @@ print(f"Signers: {signers}")
 print()
 print("Anomaly/Missing File Accounting:")
 total_possible = sentence_classes * signers
-missing_naturally = total_possible - total_clips - 1 # 1 manually excluded
+missing_naturally = total_possible - total_clips
 print(f"- Total expected (97 classes × 7 signers): {total_possible}")
 print(f"- Naturally missing (never recorded): {missing_naturally}")
 print(f"- Manually excluded (zero-content): 1 (he_is_on_the_way/3)")
