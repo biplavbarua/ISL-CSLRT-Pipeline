@@ -46,7 +46,7 @@ missing_naturally = total_possible - total_clips - 1 # 1 manually excluded
 print(f"- Total expected (97 classes × 7 signers): {total_possible}")
 print(f"- Naturally missing (never recorded): {missing_naturally}")
 print(f"- Manually excluded (zero-content): 1 (he_is_on_the_way/3)")
-print(f"- Final Valid Clips: {total_clips}")
+print(f"- Total clips in manifest: {total_clips} (662 used in splits + 1 excluded, see above)")
 '''))
 
 # Cell 4: Stage 1 Demo Markdown
