@@ -42,8 +42,9 @@ print(f"Signers: {signers}")
 print()
 print("Anomaly/Missing File Accounting:")
 # Fill NA with 'Valid' for anomaly column
-df['anomaly'] = df['anomaly'].fillna('Valid')
-display(df['anomaly'].value_counts().to_frame("Count"))
+if 'anomaly' in df.columns:
+    df['anomaly'] = df['anomaly'].fillna('Valid')
+    print(df['anomaly'].value_counts().to_frame("Count"))
 '''))
 
 # Cell 4: Stage 1 Demo Markdown
@@ -71,6 +72,9 @@ clip_dir = f"../ISL_CSLRT_Corpus/Frames_Sentence_Level/{clip_name}/{signer}"
 
 # Get the first 3 frames
 frame_files = sorted(glob.glob(os.path.join(clip_dir, "*.jpg")))[:3]
+
+assert len(frame_files) > 0, f"No frames found for clip '{clip_name}' signer '{signer}' at {clip_dir}"
+print(f"Loaded {len(frame_files)} frames for Stage 1 keypoint extraction visual verification.")
 
 fig, axes = plt.subplots(1, 3, figsize=(15, 5))
 
@@ -125,6 +129,10 @@ nb.cells.append(new_code_cell('''from step02_normalize import normalize_clip, in
 # Get all frames for the clip
 all_frames = sorted(glob.glob(os.path.join(clip_dir, "*.jpg")))
 n_frames = len(all_frames)
+
+assert n_frames > 0, f"No frames found for clip '{clip_name}' signer '{signer}' at {clip_dir}"
+print(f"Extracted landmarks from {n_frames} frames for normalization.")
+
 raw_kpts = np.zeros((n_frames, 543, 3), dtype=np.float32)
 raw_conf = np.zeros((n_frames, 543), dtype=np.float32)
 
@@ -142,6 +150,10 @@ norm_kpts = interpolate_missing(norm_kpts, raw_conf)
 rw_raw = raw_kpts[:, 54, :2].copy()
 rw_raw[raw_conf[:, 54] == 0] = np.nan
 rw_norm = norm_kpts[:, 54, :2]
+
+valid_raw = np.count_nonzero(~np.isnan(rw_raw[:, 0]))
+print(f"Plotting {valid_raw} valid raw wrist coordinates and {n_frames} normalized coordinates.")
+assert valid_raw > 0, "No valid right wrist points found in this clip to plot. Cannot demonstrate normalisation."
 
 fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 5))
 
@@ -323,8 +335,18 @@ nb.cells.append(new_code_cell('''with open('../preprocessed_v4/logs/split_summar
     split_summary = json.load(f)
     
 df_splits = pd.DataFrame(split_summary).T
-df_splits = df_splits[['train', 'val', 'test']]
-display(df_splits)
+
+# The dictionary contains nested dictionaries for train, val, test with n_clips etc.
+# Let's extract just the n_clips for a cleaner display
+summary_clean = {}
+for fold, data in split_summary.items():
+    summary_clean[fold] = {
+        'train': data['train']['n_clips'],
+        'val': data['val']['n_clips'],
+        'test': data['test']['n_clips']
+    }
+df_splits_clean = pd.DataFrame(summary_clean).T
+display(df_splits_clean)
 
 print("\\n--- ZERO-COVERAGE CLASSES IN VAL/TEST ---")
 print("Standard Split: VAL (4 missing: do_not_be_stubborn, nice_to_meet_you, what_do_you_do, what_have_you_planned_for_your_career), TEST (0 missing)")
