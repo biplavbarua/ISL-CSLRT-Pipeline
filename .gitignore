@@ -7,11 +7,12 @@
 # ── All generated / preprocessed data and caches ──────────────────────
 /preprocessed/
 /preprocessed_v4/
+/preprocessed_v4_old/
 
 # ── Model checkpoints ─────────────────────────────────────────────────
-training/*.pth
-training/*.pt
-training/*.ckpt
+*.pth
+*.pt
+*.ckpt
 
 # ── Large binary data formats (belt-and-suspenders) ───────────────────
 *.h5

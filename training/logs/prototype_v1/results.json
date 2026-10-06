@@ -1,0 +1,11 @@
+{
+  "git_hash": "67dbd461c2c2e8d1a81436963d384b450b5b4395",
+  "train_h5": "standard_train.h5",
+  "val_h5": "standard_val.h5",
+  "test_h5": "standard_test.h5",
+  "best_epoch": 26,
+  "total_epochs": 100,
+  "best_val_acc": 7.526881720430108,
+  "test_acc": 2.0833333333333335,
+  "training_time_minutes": 20.45595906575521
+}

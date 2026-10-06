@@ -11,6 +11,7 @@ from dataset import get_dataloaders, ISLDataset
 from model import SignLanguageModel
 from train import train_model, validate_label_maps
 from torch.utils.data import DataLoader
+import config
 
 def evaluate_on_test(test_h5, model_path, num_classes, device="cpu"):
     """Evaluates a saved model on a test HDF5 file, verifying its metadata."""
@@ -29,7 +30,7 @@ def evaluate_on_test(test_h5, model_path, num_classes, device="cpu"):
         if checkpoint["label_map"] != test_label_map_str:
             raise ValueError("Checkpoint label_map strictly differs from test set label_map.")
     
-    model = SignLanguageModel(input_size=378, hidden_size=256, num_classes=num_classes).to(device)
+    model = SignLanguageModel(input_size=config.INPUT_SIZE, hidden_size=config.HIDDEN_SIZE, num_classes=num_classes).to(device)
     model.load_state_dict(checkpoint["state_dict"])
     model.eval()
     
@@ -46,7 +47,7 @@ def evaluate_on_test(test_h5, model_path, num_classes, device="cpu"):
             
     return 100. * correct / total
 
-def run_loso_evaluation(exports_dir, epochs=50, device="cpu"):
+def run_loso_evaluation(exports_dir, epochs=config.DEFAULT_EPOCHS, device="cpu"):
     print("=" * 60)
     print("STARTING LEAVE-ONE-SIGNER-OUT (LOSO) CROSS-VALIDATION")
     print("=" * 60)
@@ -76,8 +77,8 @@ def run_loso_evaluation(exports_dir, epochs=50, device="cpu"):
             train_h5=train_h5,
             val_h5=val_h5,
             num_epochs=epochs,
-            batch_size=32,
-            lr=1e-3,
+            batch_size=config.BATCH_SIZE,
+            lr=config.LEARNING_RATE,
             device=device,
             save_path=model_save_path
         )
@@ -113,7 +114,7 @@ def run_loso_evaluation(exports_dir, epochs=50, device="cpu"):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Run LOSO Evaluation")
     parser.add_argument("--exports_dir", type=str, required=True, help="Directory with HDF5 files")
-    parser.add_argument("--epochs", type=int, default=50, help="Epochs per fold")
+    parser.add_argument("--epochs", type=int, default=config.DEFAULT_EPOCHS, help="Epochs per fold")
     parser.add_argument("--device", type=str, default="cpu", help="cpu or mps")
     
     args = parser.parse_args()
