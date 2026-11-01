@@ -1,0 +1,23 @@
+# ISL-CSLRT Pipeline v2 — Python dependencies
+# Install with: pip3 install -r pipeline_v2/requirements.txt
+
+# Core
+numpy>=1.26.0
+opencv-python>=4.9.0          # video frame extraction
+mediapipe>=0.10.9             # Holistic keypoint extraction
+h5py>=3.11.0                  # HDF5 dataset storage
+
+# Deep Learning
+torch>=2.4.0                  # PyTorch (MPS/CUDA/CPU)
+torchvision>=0.19.0           # (used by some data transforms)
+
+# Visualisation & Reporting
+matplotlib>=3.9.0
+pandas>=2.2.0
+
+# LLM Decoder (Ollama REST client)
+requests>=2.32.0
+
+# Utilities
+tqdm>=4.66.0
+

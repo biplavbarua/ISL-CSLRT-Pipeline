@@ -8,6 +8,8 @@
 /preprocessed/
 /preprocessed_v4/
 /preprocessed_v4_old/
+/preprocessed_v5/
+*.task
 
 # ── Model checkpoints ─────────────────────────────────────────────────
 *.pth

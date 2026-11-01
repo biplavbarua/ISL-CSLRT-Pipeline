@@ -1,0 +1,8 @@
+{
+  "model": "transformer",
+  "best_epoch": 19,
+  "total_epochs_run": 34,
+  "best_val_acc": 4.6512,
+  "test_acc": 1.0,
+  "training_time_minutes": 1.134
+}

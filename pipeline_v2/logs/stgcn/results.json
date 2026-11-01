@@ -1,0 +1,8 @@
+{
+  "model": "stgcn",
+  "best_epoch": 14,
+  "total_epochs_run": 29,
+  "best_val_acc": 9.3023,
+  "test_acc": 2.5,
+  "training_time_minutes": 33.955
+}
