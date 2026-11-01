@@ -1,0 +1,8 @@
+{
+  "model": "lstm",
+  "best_epoch": 4,
+  "total_epochs_run": 19,
+  "best_val_acc": 3.4884,
+  "test_acc": 0.0,
+  "training_time_minutes": 0.542
+}
